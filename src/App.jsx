@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 import ImageCard from "./components/ImageCard";
+import ImageSearch from "./components/ImageSearch";
 
 function App() {
   const [images, setImages] = useState([]);
@@ -17,16 +18,30 @@ function App() {
         setIsLoading(false);
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [term]);
 
   return (
     <div className="container mx-auto">
-      <div className="grid grid-cols-3 gap-4">
-        {console.log(images)}
-        {images.map((image) => {
-          return <ImageCard key={image.id} image={image} />;
-        })}
-      </div>
+      {isLoading ? (
+        <h1 className="text-center text-6xl">Loading...</h1>
+      ) : (
+        <>
+          <div className="text-3xl text-center pt-5 border-none">
+            <ImageSearch searchTerm={setTerm} />
+          </div>
+
+          <div className="grid grid-cols-3 gap-4">
+            {console.log(images)}
+            {images.length === 0 ? (
+              <p className="col-start-2 text-center">No images found</p>
+            ) : (
+              images.map((image) => {
+                return <ImageCard key={image.id} image={image} />;
+              })
+            )}
+          </div>
+        </>
+      )}
     </div>
   );
 }
